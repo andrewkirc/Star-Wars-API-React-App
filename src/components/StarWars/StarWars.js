@@ -1,14 +1,13 @@
 //Modules
 import React, { Component } from "react";
-
-//Components
-import Spinner from "../Spinner/Spinner"
+import { Modal, Button } from "react-bootstrap";
 
 //CSS
 import "bootstrap/dist/css/bootstrap.css";
-import { Modal, Button } from "react-bootstrap";
 import "animate.css";
-import "./StarWars.css";
+
+//Components
+import Spinner from "../Spinner/Spinner"
 
 //Services
 import API from "./services/API";
@@ -17,10 +16,6 @@ const api = new API();
 export default class StarWars extends Component {
   constructor(props) {
     super(props);
-    this.count = {
-      total: undefined,
-      current: undefined
-    };
     this.state = {
       search: "",
       characters: [],
@@ -31,6 +26,7 @@ export default class StarWars extends Component {
   }
 
   async componentDidMount() {
+    //Get Star Wars Characters
     try {
       const characters = await api.getAllPagesWait(
         "https://swapi.co/api/people/?format=json"
@@ -63,7 +59,7 @@ export default class StarWars extends Component {
     });
   };
 
-  //** Cards Component */
+  /** Cards Component */
   Cards = () => {
     const { search, characters, charactersFiltered, loading } = this.state;
     const filtered = search.length > 0;
@@ -92,7 +88,11 @@ export default class StarWars extends Component {
     );
   };
 
-  //** Card Component */
+  /** Card Component
+   * @param {Object} props
+   * @param {String} props.name - Character Name
+   * @param {String} props.url - Character URL
+   */
   Card = props => {
     const { name, url } = props;
     return (
@@ -112,13 +112,15 @@ export default class StarWars extends Component {
     );
   };
 
-  tryAgain = async () => {
+  /** Handle Try Again Click */
+  handleTryAgain = async () => {
     this.setState({
       loading: true
-    })
+    });
     await this.componentDidMount();
   };
 
+  /** Error Modal Component */
   Error = () => {
     const { error, loading } = this.state;
     if (error) {
@@ -129,7 +131,7 @@ export default class StarWars extends Component {
             <p>{error}</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.tryAgain}><Spinner display={loading} /> Try Again</Button>
+            <Button onClick={this.handleTryAgain}><Spinner display={loading} /> Try Again</Button>
           </Modal.Footer>
         </Modal>
       );
