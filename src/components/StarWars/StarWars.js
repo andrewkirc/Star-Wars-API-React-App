@@ -76,7 +76,7 @@ export default class StarWars extends Component {
             onChange={this.handleSearch}
             value={this.state.search}
             aria-label="Star Wars Character Search Input"
-            aria-describedby="character-earch-input"
+            aria-describedby="character-search-input"
             placeholder={
               loading ? "Loading, please wait..." : "Seach Characters"
             }
