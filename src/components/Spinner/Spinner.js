@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 const Spinner = (props) => {
     if (props.display) {
         return (
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
         )
     } else {
         return null;
