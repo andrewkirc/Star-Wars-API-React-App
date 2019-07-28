@@ -76,7 +76,7 @@ export default class API {
         this.count.total = res.data.count;
 
         if (res.data.next) {
-          this.getAllPages(res.data.next, cb);
+          this.getAllPagesWait(res.data.next, cb);
         }
 
         if (res.data.next === null) {

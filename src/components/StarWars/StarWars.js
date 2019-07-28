@@ -41,8 +41,7 @@ export default class StarWars extends Component {
     */
 
     api.getAllPages(
-      "https://swapi.co/api/people/?format=json",
-      10,
+      "https://swapi.co/api/people/?format=json", 10,
       (err, results) => {
         this.setState({
           characters: results,
