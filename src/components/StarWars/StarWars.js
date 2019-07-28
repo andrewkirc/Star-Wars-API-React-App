@@ -1,6 +1,9 @@
 //Modules
 import React, { Component } from "react";
 
+//Components
+import Spinner from "../Spinner/Spinner"
+
 //CSS
 import "bootstrap/dist/css/bootstrap.css";
 import { Modal, Button } from "react-bootstrap";
@@ -145,7 +148,7 @@ export default class StarWars extends Component {
   };
 
   Error = () => {
-    const { error } = this.state;
+    const { error, loading } = this.state;
     if (error) {
       return (
         <Modal show={true} centered>
@@ -154,7 +157,7 @@ export default class StarWars extends Component {
             <p>{error}</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.tryAgain}>Try Again</Button>
+            <Button onClick={this.tryAgain}><Spinner display={loading} /> Try Again</Button>
           </Modal.Footer>
         </Modal>
       );
