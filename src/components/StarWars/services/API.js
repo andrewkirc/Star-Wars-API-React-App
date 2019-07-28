@@ -17,38 +17,34 @@ export default class API {
    * @param {Number} [perPage=10] - Number of results per page. This is used to calculate total number of pages.
    * @param {Function} cb - Callback
    */
-  getAllPages(url, perPage, cb) {
+  async getAllPages(url, perPage, cb) {
     console.time("getCharacters");
-    http.request(url)
-      .then(res => {
-        //Determine number of available pages.
-        const _perPage = perPage || 10;
-        const numOfPages = Math.floor(res.data.count / _perPage) + 1;
+    const res = await http.request(url);
 
-        //Push all requests to promises array.
-        const promises = [];
-        for (let i = 2; i <= numOfPages; i++) {
-          promises.push(http.request(`${url}&page=${i}`));
-        }
+    //Determine number of available pages.
+    const _perPage = perPage || 10;
+    const numOfPages = Math.floor(res.data.count / _perPage) + 1;
 
-        //Calls all request methods asynchronously.
-        Promise.all(promises)
-          .then(responses => {
-            let results = [];
-            //Add first request's results to array.
-            results = results.concat(res.data.results);
+    //Push all requests to promises array.
+    const promises = [];
+    for (let i = 2; i <= numOfPages; i++) {
+      promises.push(http.request(`${url}&page=${i}`));
+    }
 
-            //Add subsequent request's results to array.
-            responses.forEach(item => {
-              results = results.concat(item.data.results);
-            });
-            console.timeEnd("getCharacters");
-            return cb(null, results);
-          })
-          .catch(e => {
-            return cb(e);
-          });
-      })
+    //Calls all request methods asynchronously.
+    const promiseAll = await Promise.all(promises);
+    let results = [];
+
+    //Add first request's results to array.
+    results = results.concat(res.data.results);
+
+    //Add subsequent request's results to array.
+    promiseAll.forEach(item => {
+      results = results.concat(item.data.results);
+    });
+    console.timeEnd("getCharacters");
+    return results;
+    /*
       .catch(err => {
         console.error("getCharacters Error:", err);
         return cb(
@@ -56,6 +52,7 @@ export default class API {
           err
         );
       });
+      */
   }
 
   /** Get all Star Wars API pages, for a particular endpoint.
@@ -66,31 +63,26 @@ export default class API {
    */
   async getAllPagesWait(url, cb) {
     if (!this.apiURL) console.time("getCharacters_Old");
-    http.request(url)
-      .then(res => {
-        this.apiURL = res.data.next;
+    //Make API request
+    const res = await http.request(url);
+    this.apiURL = res.data.next;
 
-        const arr = this.characters.concat(res.data.results);
-        this.count.current = arr.length;
-        this.characters = arr;
-        this.count.total = res.data.count;
+    //Concat results to array.
+    const arr = this.characters.concat(res.data.results);
+    this.count.current = arr.length;
+    this.characters = arr;
+    this.count.total = res.data.count;
 
-        if (res.data.next) {
-          this.getAllPagesWait(res.data.next, cb);
-        }
+    //If a next URL is found, recursively call getAllPagesWait again.
+    if (res.data.next) {
+      console.log("GET:", res.data.next)
+      return await this.getAllPagesWait(res.data.next, cb);
+    }
 
-        if (res.data.next === null) {
-          console.log("END");
-          console.timeEnd("getCharacters_Old");
-          return cb(null, this.characters);
-        }
-      })
-      .catch(err => {
-        console.error("getCharacters Error:", err);
-        return cb(
-          "Having trouble communicating with the Star Wars server. Try again in a few moments.",
-          err
-        );
-      });
+    //If a next URL is NOT found, return promise.
+    if (res.data.next === null) {
+      console.timeEnd("getCharacters_Old");
+      return this.characters;
+    }
   }
 }
