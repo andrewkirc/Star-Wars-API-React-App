@@ -22,7 +22,7 @@ export default class API {
     http
       .request(url)
       .then(res => {
-        //Determine number of availible pages.
+        //Determine number of available pages.
         const _perPage = perPage || 10;
         const numOfPages = Math.floor(res.count / _perPage) + 1;
 
