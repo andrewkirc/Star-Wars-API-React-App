@@ -9,14 +9,8 @@ describe('Star Wars API Class', () => {
         expect(response[0].name).toEqual("Luke Skywalker");
     });
 
-    it('Should retrieve all Star Wars characters (Method: getAllPagesWait)', () => {
-        api.getAllPagesWait(
-            "https://swapi.co/api/people/?format=json",
-            (err, results) => {
-                console.log(results[0].name)
-                expect(results[0].name).toEqual("");
-                done();
-            }
-        );
+    it('Should retrieve all Star Wars characters (Method: getAllPagesWait)', async () => {
+        const response = await api.getAllPagesWait("https://swapi.co/api/people/?format=json");
+        expect(response[0].name).toEqual("Luke Skywalker");
     });
 }, 15000);
