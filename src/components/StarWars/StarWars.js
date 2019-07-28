@@ -28,27 +28,25 @@ export default class StarWars extends Component {
   }
 
   async componentDidMount() {
-    /*
-    api.getAllPagesWait(
-      "https://swapi.co/api/people/?format=json",
-      (err, results) => {
-        this.setState({
-          characters: results,
-          loading: false
-        });
-      }
+    const characters = await api.getAllPagesWait(
+      "https://swapi.co/api/people/?format=json"
     );
-    */
+    console.log(characters)
 
-    api.getAllPages(
-      "https://swapi.co/api/people/?format=json", 10,
-      (err, results) => {
-        this.setState({
-          characters: results,
-          loading: false
-        });
-      }
-    );
+    this.setState({
+      characters: characters,
+      loading: false
+    });
+
+    /*
+    const characters = await api.getAllPages(
+      "https://swapi.co/api/people/?format=json", 10);
+
+    this.setState({
+      characters: characters,
+      loading: false
+    });
+    */
   }
 
   /** Handle Search - Filters characters array by name.
@@ -70,7 +68,7 @@ export default class StarWars extends Component {
   Cards = () => {
     const { search, characters, charactersFiltered, loading } = this.state;
     const filtered = search.length > 0;
-    const charactersArr = filtered ? charactersFiltered : characters;
+    const charactersArr = filtered ? charactersFiltered : characters || [];
     return (
       <React.Fragment>
         <div className="input-group mb-3">
