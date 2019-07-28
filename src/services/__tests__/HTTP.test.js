@@ -1,4 +1,5 @@
 import http from '../HTTP';
+jest.setTimeout(30000);
 
 const url = "https://swapi.co/api/people/?format=json";
 describe('HTTP Class', () => {
@@ -10,4 +11,4 @@ describe('HTTP Class', () => {
         const response = await http.request(url, 10000);
         expect(response.data.results[0].name).toEqual("Luke Skywalker");
     });
-}, 15000);
+});
