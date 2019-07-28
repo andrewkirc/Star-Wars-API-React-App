@@ -18,8 +18,11 @@ export default class StarWars extends Component {
     super(props);
     this.state = {
       search: "",
-      characters: [],
-      charactersFiltered: [],
+      characters: {
+        all: [],
+        filtered: [],
+        favorite: []
+      },
       loading: true,
       error: undefined
     };
@@ -32,7 +35,10 @@ export default class StarWars extends Component {
         "https://swapi.co/api/people/?format=json"
       );
       this.setState({
-        characters: characters,
+        characters: {
+          ...this.state.characters,
+          all: characters
+        },
         loading: false,
         error: false
       });
@@ -50,20 +56,29 @@ export default class StarWars extends Component {
   handleSearch = e => {
     const { characters } = this.state;
     const value = e.target.value;
-    const result = characters.filter(text =>
+    const result = characters.all.filter(text =>
       text.name.toLowerCase().includes(value.toLowerCase())
     );
     this.setState({
       search: value,
-      charactersFiltered: result
+      characters: {
+        ...this.state.characters,
+        filtered: result
+      },
     });
   };
 
+  handleFavorite = e => {
+    const checked = e.target.checked;
+    const value = e.target.value;
+    console.log(checked, value)
+  }
+
   /** Cards Component */
   Cards = () => {
-    const { search, characters, charactersFiltered, loading } = this.state;
+    const { search, characters, loading } = this.state;
     const filtered = search.length > 0;
-    const charactersArr = filtered ? charactersFiltered : characters || [];
+    const charactersArr = filtered ? characters.filtered : characters.all;
     return (
       <React.Fragment>
         <div className="input-group mb-3">
@@ -101,8 +116,8 @@ export default class StarWars extends Component {
           <input
             className="form-check-input"
             type="checkbox"
-            value=""
-            id={url}
+            onChange={this.handleFavorite}
+            value={url}
           />
           <label className="form-check-label" htmlFor={url}>
             {name}
