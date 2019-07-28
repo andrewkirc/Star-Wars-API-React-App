@@ -28,25 +28,22 @@ export default class StarWars extends Component {
   }
 
   async componentDidMount() {
-    const characters = await api.getAllPagesWait(
-      "https://swapi.co/api/people/?format=json"
-    );
-    console.log(characters)
-
-    this.setState({
-      characters: characters,
-      loading: false
-    });
-
-    /*
-    const characters = await api.getAllPages(
-      "https://swapi.co/api/people/?format=json", 10);
-
-    this.setState({
-      characters: characters,
-      loading: false
-    });
-    */
+    try {
+      const characters = await api.getAllPagesWait(
+        "https://swapi.co/api/people/?format=json"
+      );
+      console.log(characters)
+      this.setState({
+        characters: characters,
+        loading: false,
+        error: false
+      });
+    } catch (err) {
+      this.setState({
+        error: err.message,
+        loading: false
+      });
+    }
   }
 
   /** Handle Search - Filters characters array by name.
@@ -140,18 +137,11 @@ export default class StarWars extends Component {
     }
   };
 
-  tryAgain = () => {
-    api.getAllPages(
-      "https://swapi.co/api/people/?format=json",
-      10,
-      (err, results) => {
-        this.setState({
-          characters: results,
-          loading: false,
-          error: undefined
-        });
-      }
-    );
+  tryAgain = async () => {
+    this.setState({
+      loading: true
+    })
+    await this.componentDidMount();
   };
 
   Error = () => {

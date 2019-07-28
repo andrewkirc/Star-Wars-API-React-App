@@ -15,10 +15,13 @@ export default class API {
   /** Get all Star Wars API pages, for a particular endpoint.
    * @param {String} url - Accepts URL
    * @param {Number} [perPage=10] - Number of results per page. This is used to calculate total number of pages.
-   * @param {Function} cb - Callback
    */
-  async getAllPages(url, perPage, cb) {
-    const res = await http.request(url);
+  async getAllPages(url, perPage) {
+    try {
+      var res = await http.request(url);
+    } catch (err) {
+      return this.connectionError(err);
+    }
 
     //Determine number of available pages.
     const _perPage = perPage || 10;
@@ -31,10 +34,14 @@ export default class API {
     }
 
     //Calls all request methods asynchronously.
-    const promiseAll = await Promise.all(promises);
-    let results = [];
+    try {
+      var promiseAll = await Promise.all(promises);
+    } catch (err) {
+      return this.connectionError(err);
+    }
 
     //Add first request's results to array.
+    let results = [];
     results = results.concat(res.data.results);
 
     //Add subsequent request's results to array.
@@ -42,27 +49,21 @@ export default class API {
       results = results.concat(item.data.results);
     });
     return results;
-    /*
-      .catch(err => {
-        console.error("getCharacters Error:", err);
-        return cb(
-          "Having trouble communicating with the Star Wars server. Try again in a few moments.",
-          err
-        );
-      });
-      */
   }
 
   /** Get all Star Wars API pages, for a particular endpoint.
    * This method will wait for each result before continuing to the next.
    * @param {String} url - Accepts URL
-   * @param {Function} cb - Callback
    * @deprecated
    */
-  async getAllPagesWait(url, cb) {
+  async getAllPagesWait(url) {
     //Make API request
-    const res = await http.request(url);
-    this.apiURL = res.data.next;
+    try {
+      var res = await http.request(url);
+      this.apiURL = res.data.next;
+    } catch (err) {
+      return this.connectionError(err);
+    }
 
     //Concat results to array.
     const arr = this.characters.concat(res.data.results);
@@ -72,12 +73,19 @@ export default class API {
 
     //If a next URL is found, recursively call getAllPagesWait again.
     if (res.data.next) {
-      return this.getAllPagesWait(res.data.next, cb);
+      return this.getAllPagesWait(res.data.next);
     }
 
     //If a next URL is NOT found, return promise.
     if (res.data.next === null) {
       return this.characters;
     }
+  }
+
+  connectionError = (err) => {
+    return Promise.reject({
+      error: err,
+      message: "Having trouble communicating with the Star Wars server. Try again in a few moments."
+    });
   }
 }
