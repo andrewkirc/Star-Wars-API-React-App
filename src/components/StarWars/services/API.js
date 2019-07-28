@@ -18,7 +18,7 @@ export default class API {
    * @param {Function} cb - Callback
    */
   async getAllPages(url, perPage, cb) {
-    console.time("getCharacters");
+    console.time("getAllPages");
     const res = await http.request(url);
 
     //Determine number of available pages.
@@ -42,7 +42,7 @@ export default class API {
     promiseAll.forEach(item => {
       results = results.concat(item.data.results);
     });
-    console.timeEnd("getCharacters");
+    console.timeEnd("getAllPages");
     return results;
     /*
       .catch(err => {
@@ -62,7 +62,7 @@ export default class API {
    * @deprecated
    */
   async getAllPagesWait(url, cb) {
-    if (!this.apiURL) console.time("getCharacters_Old");
+    if (!this.apiURL) console.time("getAllPagesWait");
     //Make API request
     const res = await http.request(url);
     this.apiURL = res.data.next;
@@ -81,7 +81,7 @@ export default class API {
 
     //If a next URL is NOT found, return promise.
     if (res.data.next === null) {
-      console.timeEnd("getCharacters_Old");
+      console.timeEnd("getAllPagesWait");
       return this.characters;
     }
   }
