@@ -35,7 +35,6 @@ export default class StarWars extends Component {
       const characters = await api.getAllPagesWait(
         "https://swapi.co/api/people/?format=json"
       );
-      console.log(characters)
       this.setState({
         characters: characters,
         loading: false,
@@ -84,7 +83,6 @@ export default class StarWars extends Component {
             disabled={loading}
           />
         </div>
-        <this.Loading />
         <div className="list-group list-group-flush">
           {charactersArr.map(item => (
             <this.Card {...item} key={item.url} />
