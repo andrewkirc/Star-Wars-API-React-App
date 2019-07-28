@@ -114,32 +114,6 @@ export default class StarWars extends Component {
     );
   };
 
-  //** Loading Component */
-  Loading = () => {
-    const { loading } = this.state;
-    const percent = Math.floor((this.count.current / this.count.total) * 100);
-    if (loading && percent) {
-      return (
-        <div className="progress-container animated fadeIn">
-          <div className="progress">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{ width: `${percent}%` }}
-              aria-valuenow={percent}
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              {`${this.count.current} of ${this.count.total}`}
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
-
   tryAgain = async () => {
     this.setState({
       loading: true
@@ -169,7 +143,8 @@ export default class StarWars extends Component {
   render() {
     return (
       <div className="container">
-        <h1>Star Wars</h1>
+        <h1>Star Wars <small className="text-muted">Characters</small>
+        </h1>
         <this.Error />
         <this.Cards />
       </div>
