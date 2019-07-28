@@ -1,0 +1,35 @@
+getAllPages (Average 2264.46 ms, 2.46x faster than getAllPagesWait on average)
+Samples (in ms, 11.5mbps down/5.17mpbs up):
+2298
+1560
+1428
+1184
+10089
+1682
+1439
+1142
+1404
+1294
+4707
+1666
+1472
+1074
+1528
+
+getAllPagesWait (Average 5572.06 ms)
+Samples (in ms, 11.5mbps down/5.17mpbs up):
+5394
+10410
+4448
+3891
+3852
+2900
+6702
+2885
+4144
+11126
+8102
+3037
+3862
+6755
+6073
