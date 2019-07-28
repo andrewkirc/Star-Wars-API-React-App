@@ -19,12 +19,11 @@ export default class API {
    */
   getAllPages(url, perPage, cb) {
     console.time("getCharacters");
-    http
-      .request(url)
+    http.request(url)
       .then(res => {
         //Determine number of available pages.
         const _perPage = perPage || 10;
-        const numOfPages = Math.floor(res.count / _perPage) + 1;
+        const numOfPages = Math.floor(res.data.count / _perPage) + 1;
 
         //Push all requests to promises array.
         const promises = [];
@@ -37,11 +36,11 @@ export default class API {
           .then(responses => {
             let results = [];
             //Add first request's results to array.
-            results = results.concat(res.results);
+            results = results.concat(res.data.results);
 
             //Add subsequent request's results to array.
             responses.forEach(item => {
-              results = results.concat(item.results);
+              results = results.concat(item.data.results);
             });
             console.timeEnd("getCharacters");
             return cb(null, results);
@@ -67,21 +66,20 @@ export default class API {
    */
   async getAllPagesWait(url, cb) {
     if (!this.apiURL) console.time("getCharacters_Old");
-    http
-      .request(url)
+    http.request(url)
       .then(res => {
-        this.apiURL = res.next;
+        this.apiURL = res.data.next;
 
-        const arr = this.characters.concat(res.results);
+        const arr = this.characters.concat(res.data.results);
         this.count.current = arr.length;
         this.characters = arr;
-        this.count.total = res.count;
+        this.count.total = res.data.count;
 
-        if (res.next) {
-          this.getAllPages(res.next, cb);
+        if (res.data.next) {
+          this.getAllPages(res.data.next, cb);
         }
 
-        if (res.next === null) {
+        if (res.data.next === null) {
           console.log("END");
           console.timeEnd("getCharacters_Old");
           return cb(null, this.characters);

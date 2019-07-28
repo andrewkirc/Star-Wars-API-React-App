@@ -11,4 +11,4 @@ describe('Star Wars API Class', () => {
             }
         );
     });
-});
+}, 15000);
