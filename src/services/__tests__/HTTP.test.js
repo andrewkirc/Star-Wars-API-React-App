@@ -1,5 +1,5 @@
 import http from '../HTTP';
-jest.setTimeout(30000);
+jest.setTimeout(15000);
 
 const url = "https://swapi.co/api/people/?format=json";
 describe('HTTP Class', () => {

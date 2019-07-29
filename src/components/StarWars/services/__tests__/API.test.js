@@ -1,6 +1,6 @@
 import API from '../API';
 const api = new API();
-jest.setTimeout(30000);
+jest.setTimeout(15000);
 
 describe('Star Wars API Class', () => {
     it('Should retrieve all Star Wars characters (Method: getAllPages)', async () => {
