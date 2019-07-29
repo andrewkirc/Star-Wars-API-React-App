@@ -67,8 +67,8 @@ export default class StarWars extends Component {
   async componentDidMount() {
     //Get Star Wars Characters
     try {
-      const characters = await api.getAllPagesWait(
-        "https://swapi.co/api/people/?format=json"
+      const characters = await api.getAllPages(
+        "https://swapi.co/api/people/?format=json", 10
       );
       this.setState({
         characters: {
@@ -174,6 +174,7 @@ export default class StarWars extends Component {
             type="checkbox"
             onChange={this.handleFavorite}
             value={name}
+            checked={favorite}
           />
           <label className="form-check-label" htmlFor={url}>
             {name} {favorite ? <span className="badge badge-success">Favorite</span> : null}
