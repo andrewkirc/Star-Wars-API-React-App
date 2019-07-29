@@ -56,8 +56,7 @@ export default class StarWars extends Component {
       search: "",
       characters: {
         all: [],
-        filtered: [],
-        favorites: []
+        filtered: []
       },
       loading: true,
       error: undefined
@@ -114,11 +113,13 @@ export default class StarWars extends Component {
         //Move favorite items to top of array, and add favorite boolean.
         all.splice(index, 1);
         all.unshift({ ...value, favorite: true });
+        return { all: all };
       } else if (!e.target.checked && value.name === e.target.value) {
-        //Remove favorite boolean.
+        //Otherwise, set favorite boolean to false.
         all[index].favorite = false;
+        return { all: all };
       }
-      return { all: all };
+      return null;
     })
 
     this.setState({
@@ -126,6 +127,8 @@ export default class StarWars extends Component {
         ...this.state.characters,
         ...result
       }
+    }, () => {
+      console.log("handleFavorite", this.state)
     });
   }
 
