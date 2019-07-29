@@ -13,4 +13,4 @@ describe('Star Wars API Class', () => {
         const response = await api.getAllPagesWait("https://swapi.co/api/people/?format=json");
         expect(response[0].name).toEqual("Luke Skywalker");
     });
-}, 15000);
+});

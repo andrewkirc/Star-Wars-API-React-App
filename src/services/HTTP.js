@@ -1,7 +1,7 @@
 export default class Request {
   /** HTTP Request
    * @param {String} url - Accepts URL
-   * @param {Number} timeout - Request timeout in milliseconds.
+   * @param {Number} timeout - Future request timeout in milliseconds implementation.
    * @param {Object} [options] - Accepts Fetch API options (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options)
    * @returns {Object} { status: 200, data: {} }
    */
