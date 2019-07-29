@@ -1,3 +1,41 @@
+/*
+   Create a searchable star wars character list using React and SW API
+    
+    Acceptance Criteria:
+        - A user should be able to see the list of ALL the SW characters generated from the star wars API.
+        - A user should be able to filter the list by name using an input box
+        - Bonus: A user should be able to mark items from the list as their favorite 
+        - > Favorites should always be at the top and they should be a different background and text color
+
+    API Reference: 
+      https://swapi.co/
+      https://swapi.co/api/people/?format=js{
+
+    Goals:
+        - Pair program on feature work
+        - Learn how you approach tools and technology
+        - Interview experience matches the role
+    
+    React cheat sheet:
+        - JSX transforms HTML-like syntax to JavaScript: 
+            eg: <div /> === React.createElement('div')
+            eg: <TodoListItem text="foo" /> === React.createElement('TodoListItem', { text: 'foo' })
+        - Props:
+            Properties are immutable data that is external to a component (eg: 'text' in 'TodoListItem')
+        - State:
+            State is mutable data that is internal to a component (eg: 'constructor' in 'TodoList')
+            this.setState({ ... }) will set state on an internal component.
+        - Components will automatically re-render on property/state changes.
+        - Component lifecycle methods:
+            componentWillMount
+            componentDidMount
+            componentWillReceiveProps
+            render
+            shouldComponentUpdate
+        
+
+*/
+
 //Modules
 import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
@@ -21,7 +59,7 @@ export default class StarWars extends Component {
       characters: {
         all: [],
         filtered: [],
-        favorite: []
+        favorites: []
       },
       loading: true,
       error: undefined
@@ -69,9 +107,28 @@ export default class StarWars extends Component {
   };
 
   handleFavorite = e => {
-    const checked = e.target.checked;
-    const value = e.target.value;
-    console.log(checked, value)
+    const { characters } = this.state;
+    let all = characters.all;
+
+    //Add to favorites
+    const result = all.filter((value, index, arr) => {
+      if (e.target.checked && value.name === e.target.value) {
+        //Move favorite items to top of array, and add favorite boolean.
+        all.splice(index, 1);
+        all.unshift({ ...value, favorite: true });
+      } else if (!e.target.checked && value.name === e.target.value) {
+        //Remove favorite boolean.
+        all[index].favorite = false;
+      }
+      return { all: all };
+    })
+
+    this.setState({
+      characters: {
+        ...this.state.characters,
+        ...result
+      }
+    });
   }
 
   /** Cards Component */
@@ -107,9 +164,10 @@ export default class StarWars extends Component {
    * @param {Object} props
    * @param {String} props.name - Character Name
    * @param {String} props.url - Character URL
+   * @param {Boolean} props.favorite - Display Favorite Badge
    */
   Card = props => {
-    const { name, url } = props;
+    const { name, url, favorite } = props;
     return (
       <li className="list-group-item animated fadeIn">
         <div className="form-check">
@@ -117,10 +175,10 @@ export default class StarWars extends Component {
             className="form-check-input"
             type="checkbox"
             onChange={this.handleFavorite}
-            value={url}
+            value={name}
           />
           <label className="form-check-label" htmlFor={url}>
-            {name}
+            {name} {favorite ? <span className="badge badge-success">Favorite</span> : null}
           </label>
         </div>
       </li>
