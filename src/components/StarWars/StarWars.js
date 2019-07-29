@@ -32,8 +32,6 @@
             componentWillReceiveProps
             render
             shouldComponentUpdate
-        
-
 */
 
 //Modules
