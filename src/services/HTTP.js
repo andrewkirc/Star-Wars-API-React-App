@@ -1,4 +1,4 @@
-export default class Request {
+export default class HTTP {
   /** HTTP Request
    * @param {String} url - Accepts URL
    * @param {Number} timeout - Future request timeout in milliseconds implementation.
