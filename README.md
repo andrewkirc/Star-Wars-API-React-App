@@ -1,5 +1,5 @@
 # Star Wars API React App
- Star Wars API React App by Andrew Kirchofer. Pulls all Star Wars characters from 
+ Star Wars API React App by Andrew Kirchofer. Pulls all Star Wars characters from https://swapi.co/ API, allows users to filter by name, and select thier favorites.
  
  ---
  
