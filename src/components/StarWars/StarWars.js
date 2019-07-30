@@ -108,27 +108,22 @@ export default class StarWars extends Component {
     let all = characters.all;
 
     //Add to favorites
-    const result = all.filter((value, index, arr) => {
+    all.filter((value, index, arr) => {
       if (e.target.checked && value.name === e.target.value) {
         //Move favorite items to top of array, and add favorite boolean.
         all.splice(index, 1);
         all.unshift({ ...value, favorite: true });
-        return { all: all };
       } else if (!e.target.checked && value.name === e.target.value) {
         //Otherwise, set favorite boolean to false.
         all[index].favorite = false;
-        return { all: all };
       }
       return null;
-    })
+    });
 
     this.setState({
       characters: {
-        ...this.state.characters,
-        ...result
+        ...this.state.characters
       }
-    }, () => {
-      console.log("handleFavorite", this.state)
     });
   }
 
@@ -169,6 +164,7 @@ export default class StarWars extends Component {
    */
   Card = props => {
     const { name, url, favorite } = props;
+    const _favorite = favorite || false;
     return (
       <li className="list-group-item animated fadeIn">
         <div className="form-check">
@@ -177,10 +173,10 @@ export default class StarWars extends Component {
             type="checkbox"
             onChange={this.handleFavorite}
             value={name}
-            checked={favorite}
+            checked={_favorite}
           />
           <label className="form-check-label" htmlFor={url}>
-            {name} {favorite ? <span className="badge badge-success">Favorite</span> : null}
+            {name} {_favorite ? <span className="badge badge-success">Favorite</span> : null}
           </label>
         </div>
       </li>
