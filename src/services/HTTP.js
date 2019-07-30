@@ -4,6 +4,9 @@ export default class HTTP {
    * @param {Number} timeout - Future request timeout in milliseconds implementation.
    * @param {Object} [options] - Accepts Fetch API options (https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options)
    * @returns {Object} { status: 200, data: {} }
+   * Potential future features:
+   * > Timeout functionality, since the fetch API does not include timeout functionality.
+   * > Retry functionality, upon receiving timeout or error code.
    */
   static async request(url, timeout, options) {
     try {
