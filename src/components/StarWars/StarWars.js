@@ -114,8 +114,9 @@ export default class StarWars extends Component {
         all.splice(index, 1);
         all.unshift({ ...value, favorite: true });
       } else if (!e.target.checked && value.name === e.target.value) {
-        //Otherwise, set favorite boolean to false.
-        all[index].favorite = false;
+        //Otherwise, set favorite boolean to false and remove from top.
+        all.splice(index, 1);
+        all.push({ ...value, favorite: false });
       }
       return null;
     });
