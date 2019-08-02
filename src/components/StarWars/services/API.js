@@ -15,6 +15,8 @@ export default class API {
   /** Get all Star Wars API pages, for a particular endpoint.
    * @param {String} url - Accepts URL
    * @param {Number} [perPage=10] - Number of results per page. This is used to calculate total number of pages.
+   * Potential future features:
+   * > Max number of simultaneous connections, to prevent overloading server? Although most browsers max out at 6 connections.
    */
   async getAllPages(url, perPage) {
     try {
